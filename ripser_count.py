@@ -124,7 +124,7 @@ def count_ripser_features(barcodes, feature_list=['h0_m']):
 def matrix_to_ripser(matrix, ntokens, lower_bound=0.0):
     """Convert matrix to appropriate ripser++ format"""
     matrix = cutoff_matrix(matrix, ntokens)
-    matrix = (matrix > lower_bound).astype(np.int) * matrix
+    matrix = (matrix > lower_bound).astype(np.int16) * matrix #changed from np.int -> np.int16
     matrix = 1.0 - matrix
     matrix -= np.diag(np.diag(matrix)) # 0 on diagonal
     matrix = np.minimum(matrix.T, matrix) # symmetrical, edge emerges if at least one direction is working
@@ -143,7 +143,9 @@ def get_barcodes(matricies, ntokens_array=[], dim=1, lower_bound=0.0, layer_head
 #         with open("log.txt", 'w') as fp: # logging into file
 #             fp.write(str(layer) + "_" + str(head) + "_" + str(i) + "\n")
         matrix = matrix_to_ripser(matrix, ntokens_array[i], lower_bound)
+        
         barcode = run_ripser_on_matrix(matrix, dim)
+        
         barcodes.append(barcode)
     return barcodes
 

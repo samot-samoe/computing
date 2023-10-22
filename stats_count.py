@@ -52,7 +52,7 @@ def adj_m_to_nx_list(adj_matrix, thresholds_array, ntokens, no_mat_output=False)
     filt_mat_list = get_filtered_mat_list(adj_matrix, thresholds_array, ntokens)
     nx_graphs_list = []
     for mat in filt_mat_list:
-        nx_graphs_list.append(nx.from_numpy_matrix(np.array(mat), \
+        nx_graphs_list.append(nx.from_numpy_array(np.array(mat), \
                               create_using=nx.MultiDiGraph()))
     if no_mat_output:
         return nx_graphs_list, []

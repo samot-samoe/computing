@@ -1,0 +1,11 @@
+subset = "train_atd"           # .csv file with the texts, for which we count topological features
+input_dir = "/home/samo/tda/tda4atd/input_dir/"  # Name of the directory with .csv file
+output_dir = "/home/samo/tda/tda4atd/output_dir/"
+csv_location = '/home/samo/tda/tda4atd/train_x1000.csv'
+device = 'cpu'
+attention_dir = '/content/drive/MyDrive/tda/testing/attentions/'
+attention_name = 'train_atd_all_heads_12_layers_MAX_LEN_128_ruBert-base'
+col_with_text = 'Text'
+batch_size = 4 #batch size
+dump_size = 20  # number of batches to be dumped
+num_of_workers = 4

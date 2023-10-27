@@ -148,11 +148,11 @@ def get_list_of_ids(sentences, tokenizer):
                                       )
     return np.array(inputs['input_ids'])
 
-def subprocess_wrap(queue, function, args):
-    queue.put(function(*args))
-#     print("Putted in Queue")
-    queue.close()
-    exit()
+# def subprocess_wrap(queue, function, args):
+#     queue.put(function(*args))
+# #     print("Putted in Queue")
+#     queue.close()
+#     exit()
 
 feature_list=['self', 'beginning', 'prev', 'next', 'comma', 'dot']
 num_of_workers = num_of_workers
@@ -193,11 +193,11 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
 
         stats_tuple_lists_array.append(np.concatenate([_ for _ in stats_tuple_lists_array_part], axis=3))
         
+        
         # Сохранение признаков
         # print(args)
-        stats_tuple_lists_array_concatenated = np.concatenate(stats_tuple_lists_array, axis=3)
-        np.save(stats_file, stats_tuple_lists_array_concatenated)
-
+        
+        #ЭТО НУЖНО ВЫНЕСТИ ИЗ IF 
         # Вычисление баркодов
         barcodes = defaultdict(list)
         splitted = split_matricies_and_lengths(adj_matricies, ntokens, number_of_splits)
@@ -233,7 +233,9 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
          # Очистка для следующей итерации
         adj_matricies = []
         j+=1
-        
+
+stats_tuple_lists_array_concatenated = np.concatenate(stats_tuple_lists_array, axis=3)
+np.save(stats_file, stats_tuple_lists_array_concatenated)        
 features_array = np.concatenate(features_array, axis=3)
 np.save(output_dir+'features/' + attention_name + "_template.npy", features_array)
 
@@ -258,13 +260,13 @@ adj_filenames = [
     for filename in os.listdir(output_dir + 'barcodes/') if r_file.split('/')[-1] == filename.split('_part')[0]
 ]
 adj_filenames = sorted(adj_filenames, key = lambda x: int(x.split('_')[-1].split('of')[0][4:].strip()))
-print(adj_filenames)
+# print(adj_filenames)
 
 features_array = []
 
 for filename in tqdm(adj_filenames, desc='Calculating ripser++ features'):
     barcodes = json.load(open(filename))
-    print(f"Barcodes loaded from: {filename}", flush=True)
+    # print(f"Barcodes loaded from: {filename}", flush=True)
     features_part = []
     for layer in barcodes:
         features_layer = []

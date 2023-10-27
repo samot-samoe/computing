@@ -34,7 +34,7 @@ stats_name = "s_e_v_c_b0b1" # The set of topological features that will be count
 thresholds_array = [0.025, 0.05, 0.1, 0.25, 0.5, 0.75] # The set of thresholds
 thrs = len(thresholds_array)                           # ("t" in the paper)
 
-model_path = tokenizer_path = 'ai-forever/ruBert-base'
+model_path = tokenizer_path = model_name
 
 subset = subset          # .csv file with the texts, for which we count topological features
 input_dir = input_dir  # Name of the directory with .csv file

@@ -1,4 +1,6 @@
 features_calculation_by_thresholds.ipynb
 features_calculation_ripser_and_templates.ipynb
 features_prediction.ipynb
-/small_gpt_web
+small_gpt_web
+train_x1000.csv
+README.md

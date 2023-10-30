@@ -8,5 +8,5 @@ model_name = 'ai-forever/ruBert-base'
 attention_name = 'train_atd_all_heads_12_layers_MAX_LEN_128_ruBert-base'
 col_with_text = 'Text' # name of column with text in df
 batch_size = 4 #batch size
-dump_size = 20  # number of batches to be saved as barcode
+dump_size = 100  # number of batches to be saved as barcode
 num_of_workers = 2

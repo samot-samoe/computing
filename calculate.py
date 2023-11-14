@@ -198,7 +198,6 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
         # Сохранение признаков
         # print(args)
         
-        #ЭТО НУЖНО ВЫНЕСТИ ИЗ IF 
         # Вычисление баркодов
         barcodes = defaultdict(list)
         splitted = split_matricies_and_lengths(adj_matricies, ntokens, number_of_splits)
@@ -233,10 +232,7 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
         batch_size_temp = adj_matricies.shape[0]
         sentences = data['Text'].values[j*batch_size_temp:(j+1)*batch_size_temp]
         splitted_indexes = np.array_split(np.arange(batch_size_temp), num_of_workers)
-        print(splitted_indexes)
-        print(len(adj_matricies))
-        print(adj_matricies.shape)
-        print(number_of_batches)
+        
         # print(adj_matricies[106])
         splitted_list_of_ids = [
             get_list_of_ids(sentences[indx], tokenizer)

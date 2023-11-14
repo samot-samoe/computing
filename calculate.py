@@ -156,7 +156,7 @@ def get_list_of_ids(sentences, tokenizer):
 
 feature_list=['self', 'beginning', 'prev', 'next', 'comma', 'dot']
 num_of_workers = num_of_workers
-# pool_stats = Pool(num_of_workers)
+# pool = Pool(num_of_workers)
 # pool_features = Pool(num_of_workers)
 queue = Queue()
 number_of_splits = 2
@@ -169,6 +169,7 @@ j = 0
 
 for i in tqdm(range(number_of_batches), desc="Weights calc"):
     # Извлечение весов attention
+    # batch_size=batch_size
     attention_w = grab_attention_weights(model, tokenizer, batched_sentences[i], max_tokens_amount, device)
     adj_matricies.append(attention_w)
     
@@ -208,28 +209,51 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
         part = filename.split('_')[-1].split('.')[0]
         save_barcodes(barcodes, barcodes_file + '_' + part + '.json')
         
-        # Удаление файла с весами attention матриц после использования
-        # os.remove(filename)
+        
 
         # batch_size = adj_matricies.shape[0]
-        sentences = data[col_with_text].values[j*batch_size:(j+1)*batch_size]
-        splitted_indexes = np.array_split(np.arange(batch_size), num_of_workers)
+        # sentences = data[col_with_text].values[j*batch_size:(j+1)*batch_size]
+        # splitted_indexes = np.array_split(np.arange(batch_size), num_of_workers)
+        # splitted_list_of_ids = [
+        #     get_list_of_ids(sentences[indx], tokenizer)
+        #     for indx in tqdm(splitted_indexes, desc=f"Calculating token ids on iter {j} from {len(adj_filenames)}")
+        # ]
+        # splitted_adj_matricies = [adj_matricies[indx] for indx in splitted_indexes]
+
+        # args = [(m, feature_list, list_of_ids) for m, list_of_ids in zip(splitted_adj_matricies, splitted_list_of_ids)]
+
+        # # features_array_part = pool_features.starmap(
+        # #     calculate_features_t, args
+        # # )
+        # # pool_features.close()
+        # # pool_features.join()
+        # with multiprocessing.Pool(processes=num_of_workers) as pool:
+        #     features_array_part = pool.starmap(calculate_features_t, args)
+        # features_array.append(np.concatenate([_ for _ in features_array_part], axis=3))
+        batch_size_temp = adj_matricies.shape[0]
+        sentences = data['Text'].values[j*batch_size_temp:(j+1)*batch_size_temp]
+        splitted_indexes = np.array_split(np.arange(batch_size_temp), num_of_workers)
+        print(splitted_indexes)
+        print(len(adj_matricies))
+        print(adj_matricies.shape)
+        print(number_of_batches)
+        # print(adj_matricies[106])
         splitted_list_of_ids = [
             get_list_of_ids(sentences[indx], tokenizer)
-            for indx in tqdm(splitted_indexes, desc=f"Calculating token ids on iter {j} from {len(adj_filenames)}")
+            for indx in tqdm(splitted_indexes, desc=f"Calculating token ids on iter {i} from {len(adj_filenames)}")
         ]
         splitted_adj_matricies = [adj_matricies[indx] for indx in splitted_indexes]
 
         args = [(m, feature_list, list_of_ids) for m, list_of_ids in zip(splitted_adj_matricies, splitted_list_of_ids)]
 
-        # features_array_part = pool_features.starmap(
-        #     calculate_features_t, args
-        # )
-        # pool_features.close()
-        # pool_features.join()
         with multiprocessing.Pool(processes=num_of_workers) as pool:
             features_array_part = pool.starmap(calculate_features_t, args)
+
         features_array.append(np.concatenate([_ for _ in features_array_part], axis=3))
+
+        # Удаление файла с весами attention матриц после использования
+        # os.remove(filename)
+
          # Очистка для следующей итерации
         adj_matricies = []
         j+=1

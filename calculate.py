@@ -236,7 +236,7 @@ for i in tqdm(range(number_of_batches), desc="Weights calc"):
         # print(adj_matricies[106])
         splitted_list_of_ids = [
             get_list_of_ids(sentences[indx], tokenizer)
-            for indx in tqdm(splitted_indexes, desc=f"Calculating token ids on iter {i} from {len(adj_filenames)}")
+            for indx in tqdm(splitted_indexes, desc=f"Calculating token ids on iter {j} from {ceil(number_of_batches / DUMP_SIZE)}")
         ]
         splitted_adj_matricies = [adj_matricies[indx] for indx in splitted_indexes]
 
@@ -281,7 +281,7 @@ adj_filenames = [
 ]
 adj_filenames = sorted(adj_filenames, key = lambda x: int(x.split('_')[-1].split('of')[0][4:].strip()))
 # print(adj_filenames)
-
+print(adj_filenames)
 features_array = []
 
 for filename in tqdm(adj_filenames, desc='Calculating ripser++ features'):
